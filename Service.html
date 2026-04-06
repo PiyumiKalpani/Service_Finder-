@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServiceFinder — Trusted Home Professionals</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1a1a2e;
+  --accent: #e94560;
+  --accent2: #0f3460;
+  --gold: #f5a623;
+  --surface: #ffffff;
+  --surface2: #f7f7fb;
+  --surface3: #efefef;
+  --text: #1a1a2e;
+  --text2: #5a5a7a;
+  --text3: #9090a8;
+  --border: #e0e0ee;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow: 0 4px 24px rgba(26,26,46,0.08);
+  --shadow-lg: 0 12px 48px rgba(26,26,46,0.14);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--surface2); color:var(--text); min-height:100vh; }
+h1,h2,h3,h4 { font-family:'DM Serif Display',serif; }
+
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;
+  height:64px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo { font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--primary); letter-spacing:-0.5px; cursor:pointer; }
+.nav-logo span { color:var(--accent); }
+.nav-links { display:flex; align-items:center; gap:1rem; }
+.nav-btn {
+  padding:8px 20px; border-radius:40px; font-family:'DM Sans',sans-serif;
+  font-size:0.875rem; font-weight:500; cursor:pointer; border:none; transition:all 0.2s;
+}
+.nav-btn-ghost { background:transparent; color:var(--text); border:1.5px solid var(--border); }
+.nav-btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+.nav-btn-fill { background:var(--accent); color:#fff; }
+.nav-btn-fill:hover { background:#c73048; transform:translateY(-1px); box-shadow:0 4px 14px rgba(233,69,96,0.35); }
+.nav-user { display:flex; align-items:center; gap:10px; }
+.nav-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--accent); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:600; font-size:0.875rem; cursor:pointer;
+}
+.nav-name { font-size:0.875rem; font-weight:500; color:var(--text); }
+.nav-logout { font-size:0.8rem; color:var(--text3); cursor:pointer; border:none; background:none; padding:4px 8px; border-radius:6px; }
+.nav-logout:hover { color:var(--accent); }
+
+
+.hero-section {
+  padding:120px 2rem 80px;
+  background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 60%,#16213e 100%);
+  color:#fff; text-align:center; position:relative; overflow:hidden;
+}
+.hero-section::before {
+  content:''; position:absolute; top:-60%; left:-20%; width:140%; height:200%;
+  background:radial-gradient(ellipse at 70% 40%,rgba(233,69,96,0.18) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero-section h1 { font-size:clamp(2.2rem,5vw,3.8rem); line-height:1.15; margin-bottom:1.2rem; }
+.hero-section h1 em { color:var(--gold); font-style:italic; }
+.hero-section p { font-size:1.1rem; opacity:0.8; max-width:560px; margin:0 auto 2.5rem; font-weight:300; }
+.hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.hero-btn {
+  padding:14px 32px; border-radius:40px; font-size:1rem; font-weight:600;
+  cursor:pointer; border:none; transition:all 0.25s; font-family:'DM Sans',sans-serif;
+}
+.hero-btn-primary { background:var(--accent); color:#fff; }
+.hero-btn-primary:hover { background:#c73048; transform:translateY(-2px); box-shadow:0 8px 28px rgba(233,69,96,0.4); }
+.hero-btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,0.5); }
+.hero-btn-outline:hover { border-color:#fff; background:rgba(255,255,255,0.08); }
+.hero-stats { display:flex; justify-content:center; gap:3rem; margin-top:3.5rem; flex-wrap:wrap; }
+.hero-stat { text-align:center; }
+.hero-stat strong { font-size:1.8rem; font-family:'DM Serif Display',serif; display:block; }
+.hero-stat span { font-size:0.8rem; opacity:0.6; letter-spacing:0.5px; text-transform:uppercase; }
+
+
+.section { padding:72px 2rem; }
+.section-alt { background:var(--surface); }
+.container { max-width:1160px; margin:0 auto; }
+.section-header { text-align:center; margin-bottom:3rem; }
+.section-header h2 { font-size:clamp(1.8rem,3vw,2.5rem); color:var(--primary); }
+.section-header p { color:var(--text2); margin-top:0.5rem; font-size:1rem; }
+.tag { display:inline-block; font-size:0.75rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+
+
+.services-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; }
+.service-card-home {
+  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
+  padding:2rem; cursor:pointer; transition:all 0.25s;
+  display:flex; flex-direction:column; gap:0.75rem;
+}
+.service-card-home:hover { border-color:var(--accent); transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+.svc-icon { font-size:2rem; width:56px; height:56px; background:var(--surface2); border-radius:14px; display:flex; align-items:center; justify-content:center; }
+.svc-title { font-size:1.1rem; font-weight:600; color:var(--primary); }
+.svc-desc { font-size:0.875rem; color:var(--text2); line-height:1.6; }
+.svc-count { font-size:0.8rem; color:var(--accent); font-weight:500; margin-top:auto; }
+.svc-arrow { font-size:1.2rem; color:var(--text3); transition:transform 0.2s; }
+.service-card-home:hover .svc-arrow { transform:translateX(4px); color:var(--accent); }
+
+
+.steps-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:2rem; }
+.step-card { text-align:center; padding:1.5rem 1rem; }
+.step-num {
+  width:48px; height:48px; border-radius:50%; background:var(--accent);
+  color:#fff; font-size:1.3rem; font-weight:700; display:flex; align-items:center;
+  justify-content:center; margin:0 auto 1.2rem;
+}
+.step-card h3 { font-size:1.05rem; margin-bottom:0.5rem; color:var(--primary); }
+.step-card p { font-size:0.875rem; color:var(--text2); line-height:1.6; }
+
+
+.auth-wrap {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:80px 1rem 2rem;
+  background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%);
+}
+.auth-card {
+  background:var(--surface); border-radius:var(--radius-lg);
+  padding:2.5rem; width:100%; max-width:440px;
+  box-shadow:var(--shadow-lg);
+}
+.auth-card h2 { text-align:center; margin-bottom:0.25rem; font-size:1.8rem; }
+.auth-sub { text-align:center; color:var(--text2); font-size:0.875rem; margin-bottom:2rem; }
+.form-group { margin-bottom:1.25rem; }
+.form-group label { display:block; font-size:0.8rem; font-weight:600; color:var(--text2); margin-bottom:6px; letter-spacing:0.3px; text-transform:uppercase; }
+.form-group input, .form-group select {
+  width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:var(--radius);
+  font-size:0.95rem; font-family:'DM Sans',sans-serif; color:var(--text);
+  background:var(--surface); transition:border-color 0.2s; outline:none;
+}
+.form-group input:focus, .form-group select:focus { border-color:var(--accent); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.form-btn {
+  width:100%; padding:13px; background:var(--accent); color:#fff; border:none;
+  border-radius:40px; font-size:1rem; font-weight:600; cursor:pointer;
+  font-family:'DM Sans',sans-serif; transition:all 0.2s; margin-top:0.5rem;
+}
+.form-btn:hover { background:#c73048; transform:translateY(-1px); }
+.auth-switch { text-align:center; margin-top:1.5rem; font-size:0.875rem; color:var(--text2); }
+.auth-switch a { color:var(--accent); cursor:pointer; font-weight:500; }
+.auth-switch a:hover { text-decoration:underline; }
+.role-tabs { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1.5rem; }
+.role-tab {
+  padding:10px; border:1.5px solid var(--border); border-radius:var(--radius);
+  text-align:center; cursor:pointer; font-size:0.875rem; font-weight:500;
+  transition:all 0.2s; background:var(--surface);
+}
+.role-tab.active { border-color:var(--accent); background:rgba(233,69,96,0.06); color:var(--accent); }
+
+.dash-layout { display:flex; min-height:100vh; padding-top:64px; }
+.sidebar {
+  width:240px; background:var(--primary); color:#fff;
+  padding:2rem 1rem; flex-shrink:0; position:fixed;
+  top:64px; left:0; bottom:0; overflow-y:auto;
+}
+.sidebar-logo { font-family:'DM Serif Display',serif; font-size:1.1rem; margin-bottom:2rem; padding:0 0.5rem; opacity:0.7; }
+.sidebar-menu { list-style:none; display:flex; flex-direction:column; gap:4px; }
+.sidebar-item {
+  padding:10px 12px; border-radius:var(--radius); cursor:pointer;
+  font-size:0.9rem; font-weight:400; display:flex; align-items:center; gap:10px;
+  transition:all 0.2s; color:rgba(255,255,255,0.65);
+}
+.sidebar-item:hover { background:rgba(255,255,255,0.08); color:#fff; }
+.sidebar-item.active { background:var(--accent); color:#fff; font-weight:500; }
+.sidebar-item .si-icon { font-size:1rem; width:20px; text-align:center; }
+.dash-main { margin-left:240px; flex:1; padding:2.5rem; }
+.dash-main-full { margin-left:0; flex:1; padding:2.5rem; }
+.dash-header { margin-bottom:2rem; }
+.dash-header h2 { font-size:1.8rem; color:var(--primary); }
+.dash-header p { color:var(--text2); font-size:0.9rem; margin-top:0.25rem; }
+.dash-section { display:none; }
+.dash-section.active { display:block; }
+
+.stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:1.25rem; margin-bottom:2rem; }
+.stat-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:1.5rem; text-align:center;
+}
+.stat-card .stat-val { font-size:2rem; font-family:'DM Serif Display',serif; color:var(--primary); }
+.stat-card .stat-label { font-size:0.8rem; color:var(--text2); margin-top:4px; text-transform:uppercase; letter-spacing:0.4px; }
+.stat-card .stat-icon { font-size:1.5rem; margin-bottom:0.5rem; }
+
+
+.browse-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-bottom:2rem; }
+.browse-chip {
+  padding:12px 16px; border:1.5px solid var(--border); border-radius:var(--radius);
+  cursor:pointer; font-size:0.875rem; font-weight:500; display:flex; align-items:center;
+  gap:8px; transition:all 0.2s; background:var(--surface);
+}
+.browse-chip:hover, .browse-chip.active { border-color:var(--accent); background:rgba(233,69,96,0.06); color:var(--accent); }
+
+
+.workers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }
+.worker-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:1.5rem; transition:all 0.2s;
+}
+.worker-card:hover { border-color:var(--accent); box-shadow:var(--shadow); }
+.worker-head { display:flex; gap:12px; align-items:center; margin-bottom:1rem; }
+.worker-avatar {
+  width:52px; height:52px; border-radius:50%; background:var(--accent2);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:1.1rem; flex-shrink:0;
+}
+.worker-avatar.av-red { background:var(--accent); }
+.worker-avatar.av-gold { background:var(--gold); color:var(--primary); }
+.worker-avatar.av-green { background:#16a34a; }
+.worker-avatar.av-purple { background:#7c3aed; }
+.worker-name { font-size:1rem; font-weight:600; color:var(--primary); }
+.worker-service { font-size:0.8rem; color:var(--text2); }
+.worker-stars { color:var(--gold); font-size:0.85rem; margin-top:2px; }
+.worker-info { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
+.worker-tag {
+  font-size:0.75rem; padding:4px 10px; border-radius:40px;
+  background:var(--surface2); color:var(--text2); border:1px solid var(--border);
+}
+.worker-bio { font-size:0.85rem; color:var(--text2); line-height:1.6; margin-bottom:1rem; }
+.worker-price { font-size:1rem; font-weight:600; color:var(--primary); margin-bottom:1rem; }
+.worker-price span { font-size:0.8rem; font-weight:400; color:var(--text2); }
+.hire-btn {
+  width:100%; padding:11px; background:var(--accent); color:#fff; border:none;
+  border-radius:40px; font-size:0.9rem; font-weight:600; cursor:pointer;
+  font-family:'DM Sans',sans-serif; transition:all 0.2s;
+}
+.hire-btn:hover { background:#c73048; }
+.hire-btn:disabled { background:var(--text3); cursor:default; }
+
+
+.bookings-list { display:flex; flex-direction:column; gap:1rem; }
+.booking-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:1.5rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;
+}
+.booking-info { flex:1; min-width:200px; }
+.booking-title { font-size:1rem; font-weight:600; color:var(--primary); }
+.booking-sub { font-size:0.8rem; color:var(--text2); margin-top:2px; }
+.booking-meta { font-size:0.8rem; color:var(--text2); margin-top:6px; }
+.badge {
+  display:inline-flex; align-items:center; padding:4px 12px; border-radius:40px;
+  font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.4px;
+}
+.badge-pending { background:#fef3c7; color:#92400e; }
+.badge-accepted { background:#d1fae5; color:#065f46; }
+.badge-completed { background:#dbeafe; color:#1e40af; }
+.badge-rejected { background:#fee2e2; color:#991b1b; }
+.booking-actions { display:flex; gap:0.5rem; }
+.action-btn {
+  padding:8px 16px; border-radius:40px; font-size:0.8rem; font-weight:500;
+  cursor:pointer; border:1.5px solid; transition:all 0.2s; font-family:'DM Sans',sans-serif;
+}
+.action-btn-green { border-color:#22c55e; color:#16a34a; background:transparent; }
+.action-btn-green:hover { background:#22c55e; color:#fff; }
+.action-btn-red { border-color:var(--danger); color:var(--danger); background:transparent; }
+.action-btn-red:hover { background:var(--danger); color:#fff; }
+.action-btn-blue { border-color:var(--accent2); color:var(--accent2); background:transparent; }
+.action-btn-blue:hover { background:var(--accent2); color:#fff; }
+
+
+.profile-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:2rem; max-width:600px;
+}
+.profile-avatar-lg {
+  width:80px; height:80px; border-radius:50%; background:var(--accent);
+  color:#fff; font-size:2rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center; margin-bottom:1rem;
+}
+.profile-name { font-size:1.4rem; color:var(--primary); margin-bottom:0.25rem; }
+.profile-role { font-size:0.85rem; color:var(--text2); margin-bottom:1.5rem; }
+.profile-field { margin-bottom:1rem; }
+.profile-field label { font-size:0.75rem; color:var(--text3); text-transform:uppercase; letter-spacing:0.4px; font-weight:600; }
+.profile-field p { font-size:0.95rem; color:var(--text); margin-top:3px; }
+
+
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500;
+  display:flex; align-items:center; justify-content:center; padding:1rem;
+}
+.modal-box {
+  background:var(--surface); border-radius:var(--radius-lg);
+  padding:2rem; width:100%; max-width:460px; position:relative;
+  box-shadow:var(--shadow-lg); max-height:90vh; overflow-y:auto;
+}
+.modal-close {
+  position:absolute; top:1rem; right:1rem; background:none; border:none;
+  font-size:1.3rem; cursor:pointer; color:var(--text3); line-height:1;
+}
+.modal-close:hover { color:var(--text); }
+.modal-title { font-size:1.5rem; margin-bottom:0.25rem; }
+.modal-sub { font-size:0.875rem; color:var(--text2); margin-bottom:1.5rem; }
+.modal-actions { display:flex; gap:0.75rem; margin-top:1rem; }
+.modal-btn {
+  flex:1; padding:12px; border-radius:40px; font-size:0.9rem; font-weight:600;
+  cursor:pointer; border:none; font-family:'DM Sans',sans-serif; transition:all 0.2s;
+}
+.modal-btn-primary { background:var(--accent); color:#fff; }
+.modal-btn-primary:hover { background:#c73048; }
+.modal-btn-ghost { background:var(--surface2); color:var(--text2); }
+.modal-btn-ghost:hover { background:var(--surface3); }
+
+
+.toast {
+  position:fixed; bottom:2rem; right:2rem; z-index:999;
+  background:var(--primary); color:#fff; padding:14px 20px;
+  border-radius:var(--radius); font-size:0.875rem; font-weight:500;
+  box-shadow:var(--shadow-lg); animation:slideIn 0.3s ease;
+  max-width:320px;
+}
+.toast.success { background:#16a34a; }
+.toast.error { background:var(--danger); }
+@keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+
+.empty-state { text-align:center; padding:4rem 2rem; color:var(--text2); }
+.empty-state h3 { font-size:1.2rem; margin-bottom:0.5rem; color:var(--primary); }
+.empty-icon { font-size:3rem; margin-bottom:1rem; }
+
+
+footer {
+  background:var(--primary); color:rgba(255,255,255,0.7);
+  padding:3rem 2rem 2rem; text-align:center; font-size:0.85rem;
+}
+footer .f-logo { font-family:'DM Serif Display',serif; font-size:1.5rem; color:#fff; margin-bottom:0.5rem; }
+footer .f-logo span { color:var(--gold); }
+
+.divider { height:1px; background:var(--border); margin:1.5rem 0; }
+.text-center { text-align:center; }
+.color-accent { color:var(--accent); }
+.fw-6 { font-weight:600; }
+.mt-1 { margin-top:1rem; }
+textarea.form-group { resize:vertical; }
+textarea {
+  width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:var(--radius);
+  font-size:0.95rem; font-family:'DM Sans',sans-serif; color:var(--text);
+  background:var(--surface); transition:border-color 0.2s; outline:none; resize:vertical;
+}
+textarea:focus { border-color:var(--accent); }
+.search-bar {
+  width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:40px;
+  font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; margin-bottom:1.5rem;
+  color:var(--text); background:var(--surface);
+}
+.search-bar:focus { border-color:var(--accent); }
+@media(max-width:768px){
+  .sidebar { display:none; }
+  .dash-main { margin-left:0; padding:1.5rem; }
+  .form-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+
+<nav id="mainNav">
+  <div class="nav-logo" onclick="goHome()">Service<span>Finder</span></div>
+  <div class="nav-links" id="navLinks">
+    <button class="nav-btn nav-btn-ghost" onclick="showPage('loginPage')">Login</button>
+    <button class="nav-btn nav-btn-fill" onclick="showPage('registerPage')">Sign Up</button>
+  </div>
+</nav>
+
+
+<div id="homePage" class="page active">
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="tag">⭐ Sri Lanka's #1 Service Platform</div>
+      <h1>Find <em>Trusted</em> Home Service Professionals</h1>
+      <p>Connect with verified local experts. Book instantly. Track in real-time. Pay securely.</p>
+      <div class="hero-btns">
+        <button class="hero-btn hero-btn-primary" onclick="showPage('registerPage')">Get Started Free</button>
+        <button class="hero-btn hero-btn-outline" onclick="document.getElementById('homeServices').scrollIntoView({behavior:'smooth'})">Browse Services</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>2,400+</strong><span>Verified Workers</span></div>
+        <div class="hero-stat"><strong>18,000+</strong><span>Jobs Completed</span></div>
+        <div class="hero-stat"><strong>4.8★</strong><span>Average Rating</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="homeServices">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">Services</div>
+        <h2>What Can We Help You With?</h2>
+        <p>Browse hundreds of verified professionals across every home service category</p>
+      </div>
+      <div class="services-grid" id="homeServicesGrid"></div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">How It Works</div>
+        <h2>Simple as 1, 2, 3, 4</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><h3>Create Account</h3><p>Sign up in seconds as a customer or service provider.</p></div>
+        <div class="step-card"><div class="step-num">2</div><h3>Browse & Choose</h3><p>Filter by service type, rating, and location to find the best match.</p></div>
+        <div class="step-card"><div class="step-num">3</div><h3>Hire & Schedule</h3><p>Send a hire request with your preferred time. Provider confirms instantly.</p></div>
+        <div class="step-card"><div class="step-num">4</div><h3>Done & Review</h3><p>Job complete — pay securely and leave a rating for the community.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(135deg,#1a1a2e,#0f3460); color:#fff; text-align:center;">
+    <div class="container">
+      <h2 style="font-size:2.2rem; margin-bottom:1rem;">Ready to Get Started?</h2>
+      <p style="opacity:0.75; margin-bottom:2rem;">Join thousands of happy customers across Sri Lanka</p>
+      <button class="hero-btn hero-btn-primary" onclick="showPage('registerPage')">Create Free Account</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-logo">Service<span>Finder</span></div>
+    <p>Connecting Sri Lanka with trusted home professionals</p>
+    <p style="margin-top:1rem; font-size:0.78rem; opacity:0.5;">© 2025 ServiceFinder. All rights reserved.</p>
+  </footer>
+</div>
+
+
+<div id="loginPage" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="auth-sub">Sign in to your ServiceFinder account</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+      </div>
+      <button class="form-btn" onclick="doLogin()">Sign In</button>
+      <div class="auth-switch">Don't have an account? <a onclick="showPage('registerPage')">Sign up free →</a></div>
+      <div class="auth-switch" style="margin-top:0.75rem;"><a onclick="goHome()">← Back to home</a></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="registerPage" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Create Account</h2>
+      <p class="auth-sub">Join ServiceFinder today — it's free!</p>
+      <div class="role-tabs">
+        <div class="role-tab active" id="tabCustomer" onclick="setRole('customer')">👤 I Need Services</div>
+        <div class="role-tab" id="tabProvider" onclick="setRole('provider')">🔧 I Offer Services</div>
+      </div>
+      <div id="regRole" style="display:none;"></div>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" id="regFirstName" placeholder="Kasun"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" id="regLastName" placeholder="Perera"></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@example.com"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="regPhone" placeholder="0771234567"></div>
+      <div class="form-group"><label>City</label><input type="text" id="regCity" placeholder="Colombo"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Min 6 characters"></div>
+      <!-- Provider extra fields -->
+      <div id="providerFields" style="display:none;">
+        <div class="form-group"><label>Service Category</label>
+          <select id="regService">
+            <option value="">Select a category...</option>
+            <option>Home Maintenance & Repairs</option>
+            <option>Cleaning & Hygiene</option>
+            <option>Home Improvement</option>
+            <option>Personal & Lifestyle</option>
+            <option>Outdoor & Vehicle</option>
+            <option>Moving & Logistics</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Hourly Rate (LKR)</label><input type="number" id="regRate" placeholder="e.g. 1500"></div>
+        <div class="form-group"><label>Years of Experience</label><input type="number" id="regExp" placeholder="e.g. 5"></div>
+        <div class="form-group"><label>Short Bio</label><textarea id="regBio" rows="3" placeholder="Tell customers about your skills and experience..."></textarea></div>
+      </div>
+      <button class="form-btn" onclick="doRegister()">Create My Account</button>
+      <div class="auth-switch">Already have an account? <a onclick="showPage('loginPage')">Sign in →</a></div>
+      <div class="auth-switch" style="margin-top:0.75rem;"><a onclick="goHome()">← Back to home</a></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="customerDash" class="page">
+  <nav class="navbar" style="position:fixed;top:0;width:100%;z-index:100;" id="dashNav">
+    <div class="nav-logo">Service<span style="color:var(--accent)">Finder</span></div>
+    <div class="nav-links">
+      <div class="nav-user">
+        <div class="nav-avatar" id="custAvatar">?</div>
+        <span class="nav-name" id="custName">User</span>
+        <button class="nav-logout" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">Customer Panel</div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active" onclick="custTab('overview')" id="csi-overview"><span class="si-icon">🏠</span> Overview</li>
+        <li class="sidebar-item" onclick="custTab('browse')" id="csi-browse"><span class="si-icon">🔍</span> Find Workers</li>
+        <li class="sidebar-item" onclick="custTab('bookings')" id="csi-bookings"><span class="si-icon">📋</span> My Bookings</li>
+        <li class="sidebar-item" onclick="custTab('profile')" id="csi-profile"><span class="si-icon">👤</span> My Profile</li>
+      </ul>
+    </aside>
+    <main class="dash-main">
+      
+      <div class="dash-section active" id="cust-overview">
+        <div class="dash-header">
+          <h2 id="custWelcome">Welcome back!</h2>
+          <p>Here's what's happening with your bookings</p>
+        </div>
+        <div class="stats-row" id="custStats"></div>
+        <h3 style="margin-bottom:1rem;font-size:1.1rem;">Quick Browse</h3>
+        <div class="services-grid" id="overviewServicesGrid"></div>
+      </div>
+     
+      <div class="dash-section" id="cust-browse">
+        <div class="dash-header"><h2>Find Workers</h2><p>Browse verified professionals by category</p></div>
+        <input class="search-bar" id="workerSearch" placeholder="🔍  Search by name, skill, or location..." oninput="renderWorkers()">
+        <div class="browse-grid" id="browseChips"></div>
+        <div class="workers-grid" id="workersGrid"></div>
+      </div>
+      
+      <div class="dash-section" id="cust-bookings">
+        <div class="dash-header"><h2>My Bookings</h2><p>Track all your service requests</p></div>
+        <div class="bookings-list" id="custBookingsList"></div>
+      </div>
+  
+      <div class="dash-section" id="cust-profile">
+        <div class="dash-header"><h2>My Profile</h2><p>View and manage your account details</p></div>
+        <div class="profile-card" id="custProfileCard"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<div id="providerDash" class="page">
+  <nav class="navbar" style="position:fixed;top:0;width:100%;z-index:100;">
+    <div class="nav-logo">Service<span style="color:var(--accent)">Finder</span></div>
+    <div class="nav-links">
+      <div class="nav-user">
+        <div class="nav-avatar" id="provAvatar" style="background:var(--accent2)">?</div>
+        <span class="nav-name" id="provName">Provider</span>
+        <button class="nav-logout" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">Provider Panel</div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active" onclick="provTab('overview')" id="psi-overview"><span class="si-icon">📊</span> Overview</li>
+        <li class="sidebar-item" onclick="provTab('requests')" id="psi-requests"><span class="si-icon">📩</span> Job Requests</li>
+        <li class="sidebar-item" onclick="provTab('profile')" id="psi-profile"><span class="si-icon">👤</span> My Profile</li>
+      </ul>
+    </aside>
+    <main class="dash-main">
+   
+      <div class="dash-section active" id="prov-overview">
+        <div class="dash-header">
+          <h2 id="provWelcome">Welcome back!</h2>
+          <p>Your service dashboard</p>
+        </div>
+        <div class="stats-row" id="provStats"></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;max-width:480px;">
+          <h3 style="font-size:1rem;margin-bottom:0.5rem;">Your Service Profile</h3>
+          <p style="font-size:0.85rem;color:var(--text2);">Customers can find and hire you through your public profile. Make sure it's complete!</p>
+          <button onclick="provTab('profile')" style="margin-top:1rem;" class="nav-btn nav-btn-fill">Edit Profile →</button>
+        </div>
+      </div>
+  
+      <div class="dash-section" id="prov-requests">
+        <div class="dash-header"><h2>Job Requests</h2><p>Review and respond to incoming hire requests</p></div>
+        <div class="bookings-list" id="provRequestsList"></div>
+      </div>
+     
+      <div class="dash-section" id="prov-profile">
+        <div class="dash-header"><h2>My Profile</h2><p>Manage your public provider profile</p></div>
+        <div class="profile-card" id="provProfileCard"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<div id="hireModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeHireModal()">✕</button>
+    <h2 class="modal-title" id="hireModalTitle">Hire Professional</h2>
+    <p class="modal-sub" id="hireModalSub">Fill in details for your service request</p>
+    <div class="form-group"><label>Preferred Date</label><input type="date" id="hireDate"></div>
+    <div class="form-group"><label>Preferred Time</label><input type="time" id="hireTime" value="09:00"></div>
+    <div class="form-group"><label>Job Description</label><textarea id="hireDesc" rows="3" placeholder="Describe what you need done..."></textarea></div>
+    <div class="form-group"><label>Address</label><input type="text" id="hireAddress" placeholder="Your full address"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-ghost" onclick="closeHireModal()">Cancel</button>
+      <button class="modal-btn modal-btn-primary" onclick="confirmHire()">Send Request</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const SERVICES = [
+  { id:'s1', name:'Home Maintenance & Repairs', icon:'🔧', desc:'Plumbing, electrical, carpentry, painting, masonry & appliance repairs' },
+  { id:'s2', name:'Cleaning & Hygiene', icon:'🧽', desc:'House cleaning, carpet cleaning, pest control, sanitization' },
+  { id:'s3', name:'Home Improvement', icon:'🏠', desc:'Interior design, smart home, kitchen & bathroom remodeling' },
+  { id:'s4', name:'Personal & Lifestyle', icon:'💆', desc:'Beauty & wellness, fitness trainers, yoga, home tutoring' },
+  { id:'s5', name:'Outdoor & Vehicle', icon:'🌱', desc:'Gardening, landscaping, car washing & detailing' },
+  { id:'s6', name:'Moving & Logistics', icon:'📦', desc:'Packers & movers, furniture assembly, courier & delivery' },
+];
+
+const SEED_WORKERS = [
+  { id:'w1', firstName:'Chamara', lastName:'Silva', email:'chamara@sf.lk', phone:'0771111111', city:'Colombo', role:'provider', serviceCategory:'Home Maintenance & Repairs', rate:1800, exp:7, bio:'Expert plumber and electrician with 7 years of experience. Available 7 days a week. Fast and reliable.', password:'pass', avatarColor:'av-red' },
+  { id:'w2', firstName:'Nimal', lastName:'Fernando', email:'nimal@sf.lk', phone:'0772222222', city:'Gampaha', role:'provider', serviceCategory:'Cleaning & Hygiene', rate:1200, exp:4, bio:'Professional deep cleaning specialist. Eco-friendly products used. Experienced in office and home spaces.', password:'pass', avatarColor:'av-gold' },
+  { id:'w3', firstName:'Sanduni', lastName:'Perera', email:'sanduni@sf.lk', phone:'0773333333', city:'Kandy', role:'provider', serviceCategory:'Personal & Lifestyle', rate:2000, exp:5, bio:'Certified yoga instructor and personal trainer. Flexible scheduling, home visits available across Kandy area.', password:'pass', avatarColor:'av-green' },
+  { id:'w4', firstName:'Roshan', lastName:'Jayawardena', email:'roshan@sf.lk', phone:'0774444444', city:'Negombo', role:'provider', serviceCategory:'Outdoor & Vehicle', rate:1500, exp:6, bio:'Expert gardener and landscaper. Lawn mowing, tree trimming, planting & full garden design services.', password:'pass', avatarColor:'av-purple' },
+  { id:'w5', firstName:'Amara', lastName:'Gunaratne', email:'amara@sf.lk', phone:'0775555555', city:'Colombo', role:'provider', serviceCategory:'Home Improvement', rate:2500, exp:9, bio:'Interior design consultant. Specializes in modern and tropical designs. Budget-friendly transformations.', password:'pass', avatarColor:'av-red' },
+  { id:'w6', firstName:'Kapila', lastName:'Wickrama', email:'kapila@sf.lk', phone:'0776666666', city:'Colombo', role:'provider', serviceCategory:'Moving & Logistics', rate:3000, exp:8, bio:'Professional mover with a full team and truck. Expert in furniture assembly and delicate item packing.', password:'pass', avatarColor:'av-gold' },
+  { id:'w7', firstName:'Dilshan', lastName:'Rathnayake', email:'dilshan@sf.lk', phone:'0777777777', city:'Galle', role:'provider', serviceCategory:'Home Maintenance & Repairs', rate:1600, exp:5, bio:'Carpenter and painter. Door/window fitting, wall painting, false ceiling work. Quality guaranteed.', password:'pass', avatarColor:'av-green' },
+  { id:'w8', firstName:'Thilini', lastName:'Madushani', email:'thilini@sf.lk', phone:'0778888888', city:'Kurunegala', role:'provider', serviceCategory:'Cleaning & Hygiene', rate:1000, exp:3, bio:'Thorough house cleaning specialist. Kitchen, bathroom, full-house deep clean packages available.', password:'pass', avatarColor:'av-purple' },
+];
+
+const RATINGS = { w1:4.9, w2:4.7, w3:4.8, w4:4.6, w5:4.9, w6:4.5, w7:4.7, w8:4.8 };
+
+function getUsers() { return JSON.parse(localStorage.getItem('sf_users') || '[]'); }
+function saveUsers(u) { localStorage.setItem('sf_users', JSON.stringify(u)); }
+function getBookings() { return JSON.parse(localStorage.getItem('sf_bookings') || '[]'); }
+function saveBookings(b) { localStorage.setItem('sf_bookings', JSON.stringify(b)); }
+function getSession() { return JSON.parse(localStorage.getItem('sf_session') || 'null'); }
+function saveSession(s) { localStorage.setItem('sf_session', JSON.stringify(s)); }
+
+function initSeedData() {
+  const users = getUsers();
+  SEED_WORKERS.forEach(w => { if (!users.find(u => u.email === w.email)) users.push(w); });
+  saveUsers(users);
+}
+
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  if (getSession()) { const s = getSession(); showPage(s.role === 'provider' ? 'providerDash' : 'customerDash'); }
+  else showPage('homePage');
+}
+
+
+let regRole = 'customer';
+
+function setRole(r) {
+  regRole = r;
+  document.getElementById('tabCustomer').classList.toggle('active', r === 'customer');
+  document.getElementById('tabProvider').classList.toggle('active', r === 'provider');
+  document.getElementById('providerFields').style.display = r === 'provider' ? 'block' : 'none';
+}
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  if (!email || !pass) { toast('Please fill in all fields', 'error'); return; }
+  const users = getUsers();
+  const user = users.find(u => u.email === email && u.password === pass);
+  if (!user) { toast('Invalid email or password', 'error'); return; }
+  saveSession(user);
+  loadDash(user);
+  toast('Welcome back, ' + user.firstName + '! 👋');
+}
+
+function doRegister() {
+  const fn = document.getElementById('regFirstName').value.trim();
+  const ln = document.getElementById('regLastName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const city = document.getElementById('regCity').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  if (!fn || !ln || !email || !phone || !city || !pass) { toast('Please fill in all required fields', 'error'); return; }
+  if (pass.length < 6) { toast('Password must be at least 6 characters', 'error'); return; }
+  const users = getUsers();
+  if (users.find(u => u.email === email)) { toast('An account with this email already exists', 'error'); return; }
+  const colors = ['av-red','av-gold','av-green','av-purple'];
+  const user = {
+    id: 'u' + Date.now(), firstName:fn, lastName:ln, email, phone, city,
+    password:pass, role:regRole,
+    avatarColor: colors[Math.floor(Math.random()*colors.length)]
+  };
+  if (regRole === 'provider') {
+    const svc = document.getElementById('regService').value;
+    const rate = document.getElementById('regRate').value;
+    const exp = document.getElementById('regExp').value;
+    const bio = document.getElementById('regBio').value;
+    if (!svc || !rate || !exp || !bio) { toast('Please complete all provider fields', 'error'); return; }
+    user.serviceCategory = svc; user.rate = parseInt(rate); user.exp = parseInt(exp); user.bio = bio;
+  }
+  users.push(user);
+  saveUsers(users);
+  saveSession(user);
+  loadDash(user);
+  toast('Account created! Welcome, ' + fn + '! 🎉', 'success');
+}
+
+function doLogout() {
+  localStorage.removeItem('sf_session');
+  showPage('homePage');
+  updateNav();
+  toast('Logged out. See you soon!');
+}
+
+
+function loadDash(user) {
+  updateNav();
+  if (user.role === 'provider') {
+    document.getElementById('provAvatar').textContent = user.firstName[0]+user.lastName[0];
+    document.getElementById('provAvatar').className = 'nav-avatar ' + user.avatarColor;
+    document.getElementById('provName').textContent = user.firstName + ' ' + user.lastName;
+    document.getElementById('provWelcome').textContent = 'Welcome back, ' + user.firstName + '!';
+    renderProvStats(user);
+    renderProvRequests(user);
+    renderProvProfile(user);
+    showPage('providerDash');
+  } else {
+    document.getElementById('custAvatar').textContent = user.firstName[0]+user.lastName[0];
+    document.getElementById('custAvatar').className = 'nav-avatar ' + user.avatarColor;
+    document.getElementById('custName').textContent = user.firstName + ' ' + user.lastName;
+    document.getElementById('custWelcome').textContent = 'Welcome back, ' + user.firstName + '!';
+    renderCustStats(user);
+    renderOverviewServices();
+    renderBrowseChips();
+    renderWorkers();
+    renderCustBookings(user);
+    renderCustProfile(user);
+    showPage('customerDash');
+  }
+}
+
+function updateNav() {
+  const s = getSession();
+  const nl = document.getElementById('navLinks');
+  if (s) {
+    nl.innerHTML = `<div class="nav-user"><div class="nav-avatar ${s.avatarColor}">${s.firstName[0]}${s.lastName[0]}</div><span class="nav-name">${s.firstName}</span><button class="nav-logout" onclick="doLogout()">Logout</button></div>`;
+  } else {
+    nl.innerHTML = `<button class="nav-btn nav-btn-ghost" onclick="showPage('loginPage')">Login</button><button class="nav-btn nav-btn-fill" onclick="showPage('registerPage')">Sign Up</button>`;
+  }
+}
+
+
+function custTab(tab) {
+  document.querySelectorAll('[id^="csi-"]').forEach(el => el.classList.remove('active'));
+  document.getElementById('csi-'+tab).classList.add('active');
+  document.querySelectorAll('#customerDash .dash-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('cust-'+tab).classList.add('active');
+  const user = getSession();
+  if (tab === 'bookings') renderCustBookings(user);
+  if (tab === 'profile') renderCustProfile(user);
+  if (tab === 'browse') renderWorkers();
+}
+
+
+function provTab(tab) {
+  document.querySelectorAll('[id^="psi-"]').forEach(el => el.classList.remove('active'));
+  document.getElementById('psi-'+tab).classList.add('active');
+  document.querySelectorAll('#providerDash .dash-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('prov-'+tab).classList.add('active');
+  const user = getSession();
+  if (tab === 'requests') renderProvRequests(user);
+  if (tab === 'profile') renderProvProfile(user);
+  if (tab === 'overview') renderProvStats(user);
+}
+
+
+function renderCustStats(user) {
+  const bookings = getBookings().filter(b => b.customerId === user.id);
+  const pending = bookings.filter(b => b.status === 'pending').length;
+  const accepted = bookings.filter(b => b.status === 'accepted').length;
+  const completed = bookings.filter(b => b.status === 'completed').length;
+  document.getElementById('custStats').innerHTML = `
+    <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-val">${bookings.length}</div><div class="stat-label">Total Bookings</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-val">${pending}</div><div class="stat-label">Pending</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val">${accepted}</div><div class="stat-label">Confirmed</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val">${completed}</div><div class="stat-label">Completed</div></div>`;
+}
+
+function renderProvStats(user) {
+  const bookings = getBookings().filter(b => b.providerId === user.id);
+  const pending = bookings.filter(b => b.status === 'pending').length;
+  const accepted = bookings.filter(b => b.status === 'accepted').length;
+  const completed = bookings.filter(b => b.status === 'completed').length;
+  document.getElementById('provStats').innerHTML = `
+    <div class="stat-card"><div class="stat-icon">📩</div><div class="stat-val">${bookings.length}</div><div class="stat-label">Total Requests</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-val">${pending}</div><div class="stat-label">Awaiting Response</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val">${accepted}</div><div class="stat-label">Accepted</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val">${completed}</div><div class="stat-label">Completed</div></div>`;
+}
+
+
+function renderHomeServices() {
+  const grid = document.getElementById('homeServicesGrid');
+  if (!grid) return;
+  grid.innerHTML = SERVICES.map(s => `
+    <div class="service-card-home" onclick="showPage('registerPage')">
+      <div class="svc-icon">${s.icon}</div>
+      <h3 class="svc-title">${s.name}</h3>
+      <p class="svc-desc">${s.desc}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:0.75rem;border-top:1px solid var(--border);">
+        <span class="svc-count">View Professionals →</span>
+        <span class="svc-arrow">›</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderOverviewServices() {
+  const grid = document.getElementById('overviewServicesGrid');
+  if (!grid) return;
+  grid.innerHTML = SERVICES.map(s => `
+    <div class="service-card-home" onclick="custTab('browse'); setTimeout(()=>{ document.querySelectorAll('.browse-chip').forEach(c=>{ if(c.dataset.svc===&quot;${s.name}&quot;){c.click();} }); },100)">
+      <div class="svc-icon">${s.icon}</div>
+      <h3 class="svc-title">${s.name}</h3>
+      <p class="svc-desc">${s.desc}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:0.75rem;border-top:1px solid var(--border);">
+        <span class="svc-count">Browse Workers →</span>
+      </div>
+    </div>`).join('');
+}
+
+
+let activeServiceFilter = null;
+
+function renderBrowseChips() {
+  const el = document.getElementById('browseChips');
+  el.innerHTML = `<div class="browse-chip ${activeServiceFilter===null?'active':''}" onclick="filterWorkers(null)">All Services</div>` +
+    SERVICES.map(s => `<div class="browse-chip ${activeServiceFilter===s.name?'active':''}" data-svc="${s.name}" onclick="filterWorkers('${s.name}')">${s.icon} ${s.name}</div>`).join('');
+}
+
+function filterWorkers(svc) {
+  activeServiceFilter = svc;
+  renderBrowseChips();
+  renderWorkers();
+}
+
+function getWorkerRating(id) {
+  if (RATINGS[id]) return RATINGS[id];
+  return (4.2 + Math.random() * 0.7).toFixed(1);
+}
+
+function renderStars(r) {
+  const full = Math.floor(r); const half = r - full >= 0.5;
+  return '★'.repeat(full) + (half ? '½' : '') + ' ' + r;
+}
+
+function renderWorkers() {
+  const users = getUsers();
+  const q = (document.getElementById('workerSearch')?.value || '').toLowerCase();
+  let workers = users.filter(u => u.role === 'provider');
+  if (activeServiceFilter) workers = workers.filter(w => w.serviceCategory === activeServiceFilter);
+  if (q) workers = workers.filter(w =>
+    (w.firstName+' '+w.lastName).toLowerCase().includes(q) ||
+    (w.city||'').toLowerCase().includes(q) ||
+    (w.serviceCategory||'').toLowerCase().includes(q) ||
+    (w.bio||'').toLowerCase().includes(q)
+  );
+  const grid = document.getElementById('workersGrid');
+  if (!grid) return;
+  if (!workers.length) { grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><h3>No workers found</h3><p>Try a different filter or search term</p></div>`; return; }
+  const session = getSession();
+  grid.innerHTML = workers.map(w => {
+    const r = getWorkerRating(w.id);
+    const alreadyHired = getBookings().some(b => b.customerId === session?.id && b.providerId === w.id && b.status !== 'rejected');
+    return `<div class="worker-card">
+      <div class="worker-head">
+        <div class="worker-avatar ${w.avatarColor||''}">${w.firstName[0]}${w.lastName[0]}</div>
+        <div>
+          <div class="worker-name">${w.firstName} ${w.lastName}</div>
+          <div class="worker-service">${w.serviceCategory}</div>
+          <div class="worker-stars">${renderStars(r)}</div>
+        </div>
+      </div>
+      <div class="worker-info">
+        <span class="worker-tag">📍 ${w.city}</span>
+        <span class="worker-tag">💼 ${w.exp} yrs exp</span>
+      </div>
+      <p class="worker-bio">${w.bio}</p>
+      <div class="worker-price">LKR ${w.rate?.toLocaleString()} <span>/ hour</span></div>
+      <button class="hire-btn" ${alreadyHired?'disabled':''} onclick="openHireModal('${w.id}')">
+        ${alreadyHired ? '✓ Request Sent' : 'Hire Now'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+
+let hireTargetId = null;
+
+function openHireModal(workerId) {
+  const session = getSession();
+  if (!session) { showPage('loginPage'); return; }
+  hireTargetId = workerId;
+  const users = getUsers();
+  const worker = users.find(u => u.id === workerId);
+  document.getElementById('hireModalTitle').textContent = 'Hire ' + worker.firstName + ' ' + worker.lastName;
+  document.getElementById('hireModalSub').textContent = worker.serviceCategory + ' · LKR ' + worker.rate?.toLocaleString() + '/hr';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('hireDate').value = today;
+  document.getElementById('hireDate').min = today;
+  document.getElementById('hireAddress').value = session.city || '';
+  document.getElementById('hireDesc').value = '';
+  document.getElementById('hireModal').style.display = 'flex';
+}
+
+function closeHireModal() {
+  document.getElementById('hireModal').style.display = 'none';
+  hireTargetId = null;
+}
+
+function confirmHire() {
+  const date = document.getElementById('hireDate').value;
+  const time = document.getElementById('hireTime').value;
+  const desc = document.getElementById('hireDesc').value.trim();
+  const addr = document.getElementById('hireAddress').value.trim();
+  if (!date || !desc || !addr) { toast('Please fill in all fields', 'error'); return; }
+  const session = getSession();
+  const users = getUsers();
+  const worker = users.find(u => u.id === hireTargetId);
+  const booking = {
+    id: 'b' + Date.now(),
+    customerId: session.id,
+    customerName: session.firstName + ' ' + session.lastName,
+    customerPhone: session.phone,
+    providerId: worker.id,
+    providerName: worker.firstName + ' ' + worker.lastName,
+    serviceCategory: worker.serviceCategory,
+    date, time, desc, address: addr,
+    rate: worker.rate,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+  const bookings = getBookings();
+  bookings.push(booking);
+  saveBookings(bookings);
+  closeHireModal();
+  renderWorkers();
+  renderCustStats(session);
+  toast('Hire request sent to ' + worker.firstName + '! 🎉', 'success');
+}
+
+
+function renderCustBookings(user) {
+  const bookings = getBookings().filter(b => b.customerId === user.id).reverse();
+  const el = document.getElementById('custBookingsList');
+  if (!bookings.length) { el.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><h3>No bookings yet</h3><p>Browse services and hire a professional to get started!</p><button class="nav-btn nav-btn-fill" onclick="custTab('browse')" style="margin-top:1rem;">Browse Workers</button></div>`; return; }
+  el.innerHTML = bookings.map(b => `
+    <div class="booking-card">
+      <div class="booking-info">
+        <div class="booking-title">${b.serviceCategory}</div>
+        <div class="booking-sub">Provider: ${b.providerName}</div>
+        <div class="booking-meta">📅 ${b.date} at ${b.time} · 📍 ${b.address}</div>
+        <div class="booking-meta" style="margin-top:4px;">${b.desc}</div>
+        <div class="booking-meta" style="margin-top:4px;font-weight:500;color:var(--primary)">LKR ${b.rate?.toLocaleString()}/hr</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem;">
+        <span class="badge badge-${b.status}">${b.status.charAt(0).toUpperCase()+b.status.slice(1)}</span>
+        ${b.status === 'accepted' ? `<button class="action-btn action-btn-blue" onclick="markComplete('${b.id}')">Mark Complete</button>` : ''}
+        ${b.status === 'pending' ? `<button class="action-btn action-btn-red" onclick="cancelBooking('${b.id}')">Cancel</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function markComplete(bid) {
+  const bookings = getBookings();
+  const b = bookings.find(x => x.id === bid);
+  if (b) b.status = 'completed';
+  saveBookings(bookings);
+  renderCustBookings(getSession());
+  renderCustStats(getSession());
+  toast('Booking marked as completed! ✅', 'success');
+}
+
+function cancelBooking(bid) {
+  const bookings = getBookings();
+  const idx = bookings.findIndex(x => x.id === bid);
+  if (idx > -1) bookings.splice(idx, 1);
+  saveBookings(bookings);
+  renderCustBookings(getSession());
+  renderCustStats(getSession());
+  renderWorkers();
+  toast('Booking cancelled');
+}
+
+
+function renderProvRequests(user) {
+  const bookings = getBookings().filter(b => b.providerId === user.id).reverse();
+  const el = document.getElementById('provRequestsList');
+  if (!bookings.length) { el.innerHTML = `<div class="empty-state"><div class="empty-icon">📩</div><h3>No job requests yet</h3><p>Complete your profile so customers can find and hire you!</p></div>`; return; }
+  el.innerHTML = bookings.map(b => `
+    <div class="booking-card">
+      <div class="booking-info">
+        <div class="booking-title">${b.serviceCategory}</div>
+        <div class="booking-sub">Customer: ${b.customerName} · 📞 ${b.customerPhone}</div>
+        <div class="booking-meta">📅 ${b.date} at ${b.time} · 📍 ${b.address}</div>
+        <div class="booking-meta" style="margin-top:4px;">${b.desc}</div>
+        <div class="booking-meta" style="margin-top:4px;font-weight:500;color:var(--primary)">LKR ${b.rate?.toLocaleString()}/hr</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem;">
+        <span class="badge badge-${b.status}">${b.status.charAt(0).toUpperCase()+b.status.slice(1)}</span>
+        <div class="booking-actions">
+          ${b.status === 'pending' ? `
+            <button class="action-btn action-btn-green" onclick="respondBooking('${b.id}','accepted')">Accept</button>
+            <button class="action-btn action-btn-red" onclick="respondBooking('${b.id}','rejected')">Decline</button>` : ''}
+          ${b.status === 'accepted' ? `<button class="action-btn action-btn-blue" onclick="respondBooking('${b.id}','completed')">Mark Done</button>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function respondBooking(bid, status) {
+  const bookings = getBookings();
+  const b = bookings.find(x => x.id === bid);
+  if (b) b.status = status;
+  saveBookings(bookings);
+  const user = getSession();
+  renderProvRequests(user);
+  renderProvStats(user);
+  const msgs = { accepted:'Job accepted! Customer notified. ✅', rejected:'Job declined.', completed:'Marked as completed! 🏆' };
+  toast(msgs[status] || 'Updated', status === 'accepted' || status === 'completed' ? 'success' : '');
+}
+
+
+function renderCustProfile(user) {
+  document.getElementById('custProfileCard').innerHTML = `
+    <div class="profile-avatar-lg ${user.avatarColor}">${user.firstName[0]}${user.lastName[0]}</div>
+    <h2 class="profile-name">${user.firstName} ${user.lastName}</h2>
+    <p class="profile-role">Customer Account</p>
+    <div class="divider"></div>
+    <div class="profile-field"><label>Email</label><p>${user.email}</p></div>
+    <div class="profile-field"><label>Phone</label><p>${user.phone}</p></div>
+    <div class="profile-field"><label>City</label><p>${user.city}</p></div>
+    <div class="profile-field"><label>Member Since</label><p>${new Date().getFullYear()}</p></div>`;
+}
+
+function renderProvProfile(user) {
+  document.getElementById('provProfileCard').innerHTML = `
+    <div class="profile-avatar-lg ${user.avatarColor}" style="background:var(--accent2)">${user.firstName[0]}${user.lastName[0]}</div>
+    <h2 class="profile-name">${user.firstName} ${user.lastName}</h2>
+    <p class="profile-role">Service Provider · ${user.serviceCategory}</p>
+    <div class="divider"></div>
+    <div class="profile-field"><label>Email</label><p>${user.email}</p></div>
+    <div class="profile-field"><label>Phone</label><p>${user.phone}</p></div>
+    <div class="profile-field"><label>City</label><p>${user.city}</p></div>
+    <div class="profile-field"><label>Hourly Rate</label><p>LKR ${user.rate?.toLocaleString()} / hour</p></div>
+    <div class="profile-field"><label>Experience</label><p>${user.exp} years</p></div>
+    <div class="profile-field"><label>Bio</label><p style="line-height:1.6;color:var(--text2)">${user.bio}</p></div>`;
+}
+
+function toast(msg, type = '') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.4s'; setTimeout(() => t.remove(), 400); }, 3200);
+}
+
+
+initSeedData();
+renderHomeServices();
+updateNav();
+
+const session = getSession();
+if (session) {
+  const freshUser = getUsers().find(u => u.id === session.id) || session;
+  saveSession(freshUser);
+  loadDash(freshUser);
+}
+</script>
+</body>
+</html>
